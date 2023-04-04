@@ -64,5 +64,28 @@ userRouter.post("/register",async(req,res)=>{
     }
   })
 
+  userRouter.post("/calculate",authenticate,async(req,res)=>{
+    const {amount,rate, years}= req.body;
+    const i =rate/100;
+    const n = years;
+    const p = amount;
+
+    const F= p*((Math.pow(1+i,n)-1)/i)
+    const totalInvestment = p*n;
+    const totalInterest = F-totalInvestment;
+
+    try {
+        res.send({
+            totalInvestment:totalInvestment.toFixed(0),
+            totalInterest:totalInterest.toFixed(0),
+            maturityValue:F.toFixed(0),
+        })
+        
+    } catch (error) {
+        res.send({"msg":error.message})
+        
+    }
+  });
+
 
    module.exports={userRouter}
